@@ -1,7 +1,13 @@
 <x-layout title="Libri">
     <form method="GET" action="{{ route('books.index') }}">
         <input type="search" name="q" value="{{ $q }}"
-               placeholder="Titolo/cognome autore">
+               placeholder="Titolo o cognome autore">
+        <select name="genre" aria-label="Genere">
+            <option value="">Tutti</option>
+            @foreach ($genres as $g)
+                <option value="{{ $g->id }}" @selected($genre == $g->id)>{{ $g->name }}</option>
+            @endforeach
+        </select>
         <button type="submit">Cerca</button>
     </form>
 
@@ -11,7 +17,7 @@
                 <th>Genere</th><th>Anno</th></tr>
         </thead>
         <tbody>
-        @forelse ($libri as $book)
+        @forelse ($books as $book)
             <tr>
                 <td>
                     <a href="{{ route('books.show', $book) }}">
@@ -30,5 +36,5 @@
         </tbody>
     </table>
 
-    {{ $libri->links('pagination.semplice') }}
+    {{ $books->links('pagination.semplice') }}
 </x-layout>

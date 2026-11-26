@@ -27,18 +27,21 @@
         .cover { width: 120px; }
         .mini { width: 40px; height: 56px; object-fit: cover; }
         nav[role=navigation] { margin-top: 1rem; }
+        .attivo { font-weight: bold; text-decoration: underline; }
+        footer { text-align: center; color: #666; padding: 1rem; }
     </style>
 </head>
 <body>
 <header>
     <nav>
-        <a href="{{ route('books.index') }}">Libri</a>
-        <a href="{{ route('authors.index') }}">Autori</a>
+        {{-- 10.3: il link della sezione attuale è in grassetto --}}
+        <a href="{{ route('books.index') }}" @class(['attivo' => request()->routeIs('books.*')])>Libri</a>
+        <a href="{{ route('authors.index') }}" @class(['attivo' => request()->routeIs('authors.*')])>Autori</a>
+        <a href="{{ route('genres.index') }}" @class(['attivo' => request()->routeIs('genres.*')])>Generi</a>
     </nav>
 </header>
 
 <main>
-    {{-- Il controllo su session ('success') oggi non va mai a buon fine perché nessun controller fa ancora ->with('success', ...): index e show leggono soltanto. Comparirà quando si scriveranno store, update e destroy. --}}
     @if (session('success'))
         <p class="flash">{{ session('success') }}</p>
     @endif
@@ -46,5 +49,7 @@
     <h1>{{ $title }}</h1>
     {{ $slot }}
 </main>
+
+<footer>Bookshelf - {{ date('Y') }}</footer>
 </body>
 </html>
