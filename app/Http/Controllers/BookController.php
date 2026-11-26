@@ -12,15 +12,15 @@ class BookController extends Controller
 {
     public function index(Request $request): View
     {
-        $books = Book::query()
+        $books = Book::query() //apre un query builder vuoto
             ->with(['authors', 'genre'])       // eager loading: evita il problema N+1
             ->search($request->query('q'))     // lo scope di ieri
             ->orderBy('title')
-            ->paginate(10)
+            ->paginate(10) //viene alimentato automaticamente con il parametro page
             ->withQueryString();               // mantiene ?q= nei link di paginazione
 
         return view('books.index', [
-            'books' => $books,
+            'libri' => $books,
             'q'     => $request->query('q'),
         ]);
     }
@@ -39,8 +39,8 @@ class BookController extends Controller
     public function show(Book $book): View
     {
         $book->load(['authors', 'genre', 'user']);
-
-        return view('books.show', compact('book'));
+ 
+        return view('books.show', compact('book')); //compact è uguale a ['book' => $book]
     }
 
     public function edit(Book $book)

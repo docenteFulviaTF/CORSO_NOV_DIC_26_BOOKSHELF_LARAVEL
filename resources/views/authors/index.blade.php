@@ -1,5 +1,6 @@
 <x-layout title="Autori">
     <table>
+        <tr><th>Nome Cognome</th><th>Nazionalità</th><th>N. libri</th></tr>
     @foreach ($authors as $author)
         <tr>
             <td><a href="{{ route('authors.show', $author) }}">

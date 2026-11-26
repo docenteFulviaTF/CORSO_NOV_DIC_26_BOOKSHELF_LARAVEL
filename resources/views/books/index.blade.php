@@ -1,7 +1,7 @@
 <x-layout title="Libri">
     <form method="GET" action="{{ route('books.index') }}">
         <input type="search" name="q" value="{{ $q }}"
-               placeholder="Titolo o cognome autore">
+               placeholder="Titolo/cognome autore">
         <button type="submit">Cerca</button>
     </form>
 
@@ -11,7 +11,7 @@
                 <th>Genere</th><th>Anno</th></tr>
         </thead>
         <tbody>
-        @forelse ($books as $book)
+        @forelse ($libri as $book)
             <tr>
                 <td>
                     <a href="{{ route('books.show', $book) }}">
@@ -30,5 +30,5 @@
         </tbody>
     </table>
 
-    {{ $books->links('pagination.semplice') }}
+    {{ $libri->links('pagination.semplice') }}
 </x-layout>

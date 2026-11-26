@@ -2,6 +2,7 @@
      Laravel 13 non include piu' le viste "default" e "simple-default". --}}
 @if ($paginator->hasPages())
     <nav class="paginazione">
+
         @if ($paginator->onFirstPage())
             <span>&laquo; Precedente</span>
         @else

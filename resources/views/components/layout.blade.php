@@ -38,6 +38,7 @@
 </header>
 
 <main>
+    {{-- Il controllo su session ('success') oggi non va mai a buon fine perché nessun controller fa ancora ->with('success', ...): index e show leggono soltanto. Comparirà quando si scriveranno store, update e destroy. --}}
     @if (session('success'))
         <p class="flash">{{ session('success') }}</p>
     @endif
