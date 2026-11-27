@@ -57,7 +57,8 @@ class BookController extends Controller
     // BookRequest valida PRIMA che il metodo inizi: se qualcosa non va, si torna al form
     public function store(BookRequest $request): RedirectResponse
     {
-        $data = $request->validated();                     // solo i campi validati, mai $request->all()
+        $data = $request->validated(); //le regole sono definite nella classe App\Http\Requests\BookRequest                     
+        // solo i campi validati, mai $request->all()
 
         $book = new Book($data);                           // assegna solo le colonne fillable
         $book->user_id = $request->user()->id;             // il libro appartiene a chi lo inserisce
@@ -93,7 +94,7 @@ class BookController extends Controller
 
         $data = $request->validated();
         $book->fill($data);
-        $book->save();
+        $book->save();//il save sa che deve fare un'update in base alla proprietà exists che legge da solo. 
         $book->authors()->sync($data['author_ids']);
 
         return redirect()->route('books.show', $book)->with('success', 'Libro aggiornato.');
@@ -112,9 +113,20 @@ class BookController extends Controller
     private function authorizeOwner(Book $book): void
     {
         abort_if(
-            (int) $book->user_id !== (int) auth()->id,
+            (int) $book->user_id !== (int) auth()->id(),
             403,
             'Non puoi modificare un libro inserito da un altro utente.'
         );
     }
+
+    //volendo evitare il bookRequest posssiamo scrivere in un unico punto del controller (visto che le stesse regole sono usate per l'inserimento e per l'update) passando le rules al metodo validated
+    // private function rules(): array
+    // {
+    //     return [
+    //         'title'        => ['required', 'string', 'max:200'],
+    //         'author_ids'   => ['required', 'array', 'min:1'],
+    //         'author_ids.*' => ['integer', 'exists:authors,id'],
+    //         'genre_id'     => ['nullable', 'integer', 'exists:genres,id'],
+    //     ];
+    // }
 }

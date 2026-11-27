@@ -55,10 +55,11 @@ class AuthController extends Controller
             $request->session()->regenerate();     // contro il session fixation
 
             return redirect()->intended(route('books.index'));
+            //rimanda l'utente alla pagina che voleva aprire prima di essere costretto a fare il login. Se una pagina così non c'è, usa l'URL che gli passi come valore di ripiego.
         }
 
         return back()
-            ->withErrors(['email' => 'Credenziali non valide.'])
+            ->withErrors(['login' => 'Credenziali non valide.'])
             ->onlyInput('email');
     }
 

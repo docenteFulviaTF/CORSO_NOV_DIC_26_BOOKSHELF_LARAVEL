@@ -32,3 +32,8 @@ Route::middleware('auth')->group(function () {
 
 // Dichiarata DOPO books/create, altrimenti "create" verrebbe letto come {book}
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+
+//se voglio impostare il parametro a intero posso farlo. Se non passo dovrò gestire l'errore
+// Route::get('/books/{book}', [BookController::class, 'show'])
+    // ->name('books.show')
+    // ->whereNumber('book');
