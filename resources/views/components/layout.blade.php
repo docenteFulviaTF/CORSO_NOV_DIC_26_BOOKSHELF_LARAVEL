@@ -27,17 +27,27 @@
         .cover { width: 120px; }
         .mini { width: 40px; height: 56px; object-fit: cover; }
         nav[role=navigation] { margin-top: 1rem; }
-        .attivo { font-weight: bold; text-decoration: underline; }
-        footer { text-align: center; color: #666; padding: 1rem; }
     </style>
 </head>
 <body>
 <header>
     <nav>
-        {{-- 10.3: il link della sezione attuale è in grassetto --}}
-        <a href="{{ route('books.index') }}" @class(['attivo' => request()->routeIs('books.*')])>Libri</a>
-        <a href="{{ route('authors.index') }}" @class(['attivo' => request()->routeIs('authors.*')])>Autori</a>
-        <a href="{{ route('genres.index') }}" @class(['attivo' => request()->routeIs('genres.*')])>Generi</a>
+        <a href="{{ route('books.index') }}">Libri</a>
+        <a href="{{ route('authors.index') }}">Autori</a>
+
+        {{-- @auth / @guest: il contenuto compare solo se l'utente e' (o non e') loggato --}}
+        @auth
+            <a href="{{ route('books.create') }}">Nuovo libro</a>
+            <span>{{ auth()->user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button type="submit">Esci</button>
+            </form>
+        @endauth
+        @guest
+            <a href="{{ route('login') }}">Accedi</a>
+            <a href="{{ route('register') }}">Registrati</a>
+        @endguest
     </nav>
 </header>
 
@@ -49,7 +59,5 @@
     <h1>{{ $title }}</h1>
     {{ $slot }}
 </main>
-
-<footer>Bookshelf - {{ date('Y') }}</footer>
 </body>
 </html>

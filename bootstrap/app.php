@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Un nome breve per usarlo solo su alcune rotte: ->middleware('tempo')
+        $middleware->alias([
+            'tempo' => \App\Http\Middleware\AddResponseTime::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

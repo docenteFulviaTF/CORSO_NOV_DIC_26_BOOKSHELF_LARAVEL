@@ -2,9 +2,6 @@
     <table>
     <tr><th>Autori</th>
         <td>
-        @if ($book->authors->isEmpty())
-            Autore sconosciuto
-        @endif
         @foreach ($book->authors as $author)
             <a href="{{ route('authors.show', $author) }}">
             {{ $author->full_name }}</a>@if (! $loop->last), @endif
@@ -18,13 +15,23 @@
     <tr><th>Inserito da</th><td>{{ $book->user?->name ?? '-' }}</td></tr>
     </table>
 
-    @if ($book->pages > 400)
-        <p><strong>Libro lungo</strong></p>
-    @endif
+    {{-- Pulsanti visibili solo al proprietario. Il controllo vero e' nel controller:
+         nascondere un pulsante non protegge niente. --}}
+    @auth
+        @if ((int) $book->user_id === (int) auth()->id())
+            <p style="margin-top:1rem">
+                <a class="btn" href="{{ route('books.edit', $book) }}">Modifica</a>
 
-    @if ($book->genre)
-        <p><a href="{{ route('books.index', ['genre' => $book->genre_id]) }}">Altri libri del genere {{ $book->genre->name }}</a></p>
-    @endif
+                {{-- Eliminare con un form, non con un link: una GET non deve modificare dati --}}
+                <form method="POST" action="{{ route('books.destroy', $book) }}" class="inline"
+                      onsubmit="return confirm('Eliminare il libro?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-danger">Elimina</button>
+                </form>
+            </p>
+        @endif
+    @endauth
 
     <p><a href="{{ route('books.index') }}">Torna all'elenco</a></p>
 </x-layout>
