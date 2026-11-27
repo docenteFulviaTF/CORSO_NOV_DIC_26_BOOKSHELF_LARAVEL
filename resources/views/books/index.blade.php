@@ -1,11 +1,13 @@
 <x-layout title="Libri">
+     
     <form method="GET" action="{{ route('books.index') }}">
         <input type="search" name="q" value="{{ $q }}"
                placeholder="Titolo o cognome autore">
         <select name="genre" aria-label="Genere">
             <option value="">Tutti</option>
+         
             @foreach ($genres as $g)
-                <option value="{{ $g->id }}" @selected($genre == $g->id)>{{ $g->name }}</option>
+                <option value="{{ $g->id }}" @selected((string) request('genre') === (string) $g->id)>{{ $g->name }}</option>
             @endforeach
         </select>
         <button type="submit">Cerca</button>

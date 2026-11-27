@@ -25,16 +25,24 @@ class BookController extends Controller
 {
     public function index(Request $request): View
     {
+        $q = $request->query('q');
+        $genreId = $request->query('genre');
+
+
         $books = Book::query()
             ->with(['authors', 'genre'])
-            ->search($request->query('q'))
+            ->search($q)
+            ->when($genreId, fn($query, $id) => $query->where('genre_id', $id))
             ->orderBy('title')
             ->paginate(10)
             ->withQueryString();
 
+
         return view('books.index', [
-            'books' => $books,
-            'q'     => $request->query('q'),
+            'books'  => $books,
+            'genres' => Genre::orderBy('name')->get(),
+            'q'      => $q,
+            'genre'  => $genreId,
         ]);
     }
 
@@ -105,7 +113,7 @@ class BookController extends Controller
     private function authorizeOwner(Book $book): void
     {
         abort_if(
-            (int) $book->user_id !== (int) auth()->id(),
+            (int) $book->user_id !== (int) auth()->id,
             403,
             'Non puoi modificare un libro inserito da un altro utente.'
         );
