@@ -42,7 +42,6 @@ class BookController extends Controller
             'books'  => $books,
             'genres' => Genre::orderBy('name')->get(),
             'q'      => $q,
-            'genre'  => $genreId,
         ]);
     }
 
